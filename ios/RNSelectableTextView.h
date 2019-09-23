@@ -1,17 +1,23 @@
-#if __has_include(<RCTText/RCTBaseTextInputView.h>)
-#import <RCTText/RCTBaseTextInputView.h>
+#if __has_include(<React/RCTBridge.h>)
+#import <React/RCTBridge.h>
 #else
-#import "RCTBaseTextInputView.h"
+#import "RCTBridge.h"
+#endif
+
+#if __has_include(<React/RCTView.h>)
+#import <React/RCTView.h>
+#else
+#import "RCTView.h"
 #endif
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface RNSelectableTextView : RCTBaseTextInputView
+@interface RNSelectableTextView : RCTView
 
-@property (nonnull, nonatomic, copy) NSString *value;
+-(instancetype)initWithFrame:(CGRect)frame andBridge: (RCTBridge *)bridge;
 @property (nonatomic, copy) RCTDirectEventBlock onSelection;
 @property (nullable, nonatomic, copy) NSArray<NSString *> *menuItems;
-@property (nonatomic, copy) RCTDirectEventBlock onHighlightPress;
+-(void)setupView:(nonnull NSNumber *)textInputReactTag;
 
 @end
 
