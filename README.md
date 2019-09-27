@@ -13,6 +13,8 @@
 
 ## Usage
 
+WIP - for now iOS only
+
 ```javascript
 import { SelectableText } from "react-native-selectable-text";
 
@@ -27,17 +29,12 @@ import { SelectableText } from "react-native-selectable-text";
     - selectionEnd: (int) is the end position of the selected text
    */
   onSelection={({ eventType, content, selectionStart, selectionEnd }) => {}}
-  value="I crave star damage"
 />;
 ```
 
 ## Getting started
 
 `$ npm install @astrocoders/react-native-selectable-text --save`
-
-### Mostly automatic installation
-
-`$ react-native link @astrocoders/react-native-selectable-text`
 
 ### Manual installation
 
@@ -73,11 +70,6 @@ import { SelectableText } from "react-native-selectable-text";
 ## Props
 | name | description | type | default |
 |--|--|--|--|
-| **value** | text content | string | "" |
 | **onSelection** | Called when the user taps in a item of the selection menu | ({ eventType: string, content: string, selectionStart: int, selectionEnd: int }) => void | () => {} |
 | **menuItems** | context menu items | array(string) | [] |
-| **style** | additional styles to be applied to text | Object | null |
-| **highlights** | array of text ranges that should be highlighted with an optional id | array({ id: string, start: int, end: int }) | [] |
-| **highlightColor** | highlight color |string | null |
-| **onHighlightPress** | called when the user taps the highlight  |(id: string) => void | () => {} |
-| **appendToChildren** | element to be added in the last line of text | ReactNode | null |
+end: int }) | [] |
