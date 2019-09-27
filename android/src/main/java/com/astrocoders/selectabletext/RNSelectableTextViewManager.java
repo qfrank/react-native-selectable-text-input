@@ -1,30 +1,29 @@
 package com.astrocoders.selectabletext;
 
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.ActionMode;
 import android.view.ActionMode.Callback;
+import android.view.Menu;
+import android.view.MenuItem;
 
-import java.util.Map;
-
+import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableArray;
-import com.facebook.react.uimanager.ThemedReactContext;
-import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.common.MapBuilder;
-import com.facebook.react.uimanager.events.RCTEventEmitter;
-
+import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
-import com.facebook.react.views.text.ReactTextView;
-import com.facebook.react.views.text.ReactTextViewManager;
+import com.facebook.react.uimanager.events.RCTEventEmitter;
+import com.facebook.react.views.textinput.ReactEditText;
+import com.facebook.react.views.view.ReactViewGroup;
+import com.facebook.react.views.view.ReactViewManager;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
-
-public class RNSelectableTextManager extends ReactTextViewManager {
+public class RNSelectableTextViewManager extends ReactViewManager {
     public static final String REACT_CLASS = "RNSelectableText";
+    private String[] _menuItems;
 
 
     @Override
@@ -33,22 +32,25 @@ public class RNSelectableTextManager extends ReactTextViewManager {
     }
 
     @Override
-    public ReactTextView createViewInstance(ThemedReactContext context) {
-        return new ReactTextView(context);
+    public ReactViewGroup createViewInstance(ThemedReactContext context) {
+        return new ReactViewGroup(context);
     }
 
 
     @ReactProp(name = "menuItems")
-    public void setMenuItems(ReactTextView textView, ReadableArray items) {
+    public void setMenuItems(ReactViewGroup reactViewGroup, ReadableArray items) {
         List<String> result = new ArrayList<String>(items.size());
         for (int i = 0; i < items.size(); i++) {
             result.add(items.getString(i));
         }
 
-        registerSelectionListener(result.toArray(new String[items.size()]), textView);
+        this._menuItems = result.toArray(new String[items.size()]);
+
+        // PREVIOUS CODE
+        // registerSelectionListener(result.toArray(new String[items.size()]), reactViewGroup);
     }
 
-    public void registerSelectionListener(final String[] menuItems, final ReactTextView view) {
+    public void registerSelectionListener(final ReactEditText view) {
         view.setCustomSelectionActionModeCallback(new Callback() {
             @Override
             public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
@@ -56,9 +58,9 @@ public class RNSelectableTextManager extends ReactTextViewManager {
                 // will be used to generate action buttons for the action mode
                 // Android Smart Linkify feature pushes extra options into the menu
                 // and would override the generated menu items
-                menu.clear();
-                for (int i = 0; i < menuItems.length; i++) {
-                  menu.add(0, i, 0, menuItems[i]);
+                 menu.clear();
+                for (int i = 0; i < _menuItems.length; i++) {
+                    menu.add(0, i, 0, _menuItems[i]);
                 }
                 return true;
             }
@@ -80,7 +82,7 @@ public class RNSelectableTextManager extends ReactTextViewManager {
                 String selectedText = view.getText().toString().substring(selectionStart, selectionEnd);
 
                 // Dispatch event
-                onSelectNativeEvent(view, menuItems[item.getItemId()], selectedText, selectionStart, selectionEnd);
+                onSelectNativeEvent(view, _menuItems[item.getItemId()], selectedText, selectionStart, selectionEnd);
 
                 mode.finish();
 
@@ -90,7 +92,7 @@ public class RNSelectableTextManager extends ReactTextViewManager {
         });
     }
 
-    public void onSelectNativeEvent(ReactTextView view, String eventType, String content, int selectionStart, int selectionEnd) {
+    public void onSelectNativeEvent(ReactEditText view, String eventType, String content, int selectionStart, int selectionEnd) {
         WritableMap event = Arguments.createMap();
         event.putString("eventType", eventType);
         event.putString("content", content);
@@ -99,20 +101,13 @@ public class RNSelectableTextManager extends ReactTextViewManager {
 
         // Dispatch
         ReactContext reactContext = (ReactContext) view.getContext();
-        reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(
-                view.getId(),
-                "topSelection",
-                event
-        );
+        reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(view.getId(), "topSelection", event);
     }
 
     @Override
     public Map getExportedCustomDirectEventTypeConstants() {
         return MapBuilder.builder()
-                .put(
-                        "topSelection",
-                        MapBuilder.of(
-                                "registrationName","onSelection"))
-                .build();
+            .put("topSelection", MapBuilder.of("registrationName","onSelection"))
+            .build();
     }
 }
