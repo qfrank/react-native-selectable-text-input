@@ -21,9 +21,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class RNSelectableTextViewManager extends ReactViewManager {
-    public static final String REACT_CLASS = "RNSelectableText";
-    private String[] _menuItems;
+public class RNSelectableTextInputViewManager extends ReactViewManager {
+    public static final String REACT_CLASS = "RNSelectableTextInput";
+    private String[] _menuItems = new String[0];
 
 
     @Override
@@ -39,15 +39,17 @@ public class RNSelectableTextViewManager extends ReactViewManager {
 
     @ReactProp(name = "menuItems")
     public void setMenuItems(ReactViewGroup reactViewGroup, ReadableArray items) {
-        List<String> result = new ArrayList<String>(items.size());
-        for (int i = 0; i < items.size(); i++) {
-            result.add(items.getString(i));
+        if(items != null) {
+            List<String> result = new ArrayList<String>(items.size());
+            for (int i = 0; i < items.size(); i++) {
+                result.add(items.getString(i));
+            }
+
+            this._menuItems = result.toArray(new String[items.size()]);
+
+            // PREVIOUS CODE
+            // registerSelectionListener(result.toArray(new String[items.size()]), reactViewGroup);
         }
-
-        this._menuItems = result.toArray(new String[items.size()]);
-
-        // PREVIOUS CODE
-        // registerSelectionListener(result.toArray(new String[items.size()]), reactViewGroup);
     }
 
     public void registerSelectionListener(final ReactEditText view) {
@@ -58,7 +60,7 @@ public class RNSelectableTextViewManager extends ReactViewManager {
                 // will be used to generate action buttons for the action mode
                 // Android Smart Linkify feature pushes extra options into the menu
                 // and would override the generated menu items
-                 menu.clear();
+                menu.clear();
                 for (int i = 0; i < _menuItems.length; i++) {
                     menu.add(0, i, 0, _menuItems[i]);
                 }

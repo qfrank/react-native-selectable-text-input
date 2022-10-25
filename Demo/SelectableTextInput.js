@@ -1,9 +1,9 @@
 import React from 'react'
 import ReactNative, { TextInput, requireNativeComponent, NativeModules } from 'react-native'
 
-const RNSelectableText = requireNativeComponent('RNSelectableText')
+const RNSelectableTextInput = requireNativeComponent('RNSelectableTextInput')
 
-export class SelectableText extends React.Component {
+export class SelectableTextInput extends React.Component {
   constructor(props) {
     super(props);
     // this.setNativeProps = this.setNativeProps.bind(this);
@@ -12,7 +12,7 @@ export class SelectableText extends React.Component {
   componentDidMount() {
     this._inputReactTag = this.textInputReactTag();
     if (this._inputReactTag){
-      NativeModules.RNSelectableTextManager.setupMenuItems(
+      NativeModules.RNSelectableTextInputManager.setupMenuItems(
         ReactNative.findNodeHandle(this), 
         this._inputReactTag)
     }
@@ -31,16 +31,17 @@ export class SelectableText extends React.Component {
   }
 
   render() {
-    return <RNSelectableText menuItems={this.props.menuItems} 
-      inputReactTag={this._inputReactTag} onSelection={this.onSelectionNative}>
+    return <RNSelectableTextInput menuItems={this.props.menuItems} 
+      inputReactTag={this._inputReactTag}>
       <TextInput 
         {...this.props} 
         {...this.style} 
         style={[this.props.style, {height: 'auto'}]} 
-        ref={(r) => { this._textInput = r; }}>
+        ref={(r) => { this._textInput = r; }}
+        onSelection={this.onSelectionNative}>
           {this.props.children}
       </TextInput>
-    </RNSelectableText>
+    </RNSelectableTextInput>
   }
 
   // setNativeProps(nativeProps = {}) {

@@ -10,18 +10,18 @@ import com.facebook.react.uimanager.ViewManager;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-public class RNSelectableTextPackage implements ReactPackage {
+public class RNSelectableTextInputPackage implements ReactPackage {
     @Override
     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
         List<NativeModule> modules = new ArrayList<>();
-        modules.add(new RNSelectableTextModule(reactContext));
+        modules.add(new RNSelectableTextInputModule(reactContext));
         return modules;
     }
 
     @Override
     public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
         return Arrays.<ViewManager>asList(
-                new RNSelectableTextViewManager()
+                new RNSelectableTextInputViewManager()
         );
     }
 }
