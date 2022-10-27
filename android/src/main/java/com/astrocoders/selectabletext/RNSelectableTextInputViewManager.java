@@ -84,7 +84,7 @@ public class RNSelectableTextInputViewManager extends ReactViewManager {
                 String selectedText = view.getText().toString().substring(selectionStart, selectionEnd);
 
                 // Dispatch event
-                onSelectNativeEvent(view, _menuItems[item.getItemId()], selectedText, selectionStart, selectionEnd);
+                onSelectNativeEvent(view, item.getItemId(), selectedText, selectionStart, selectionEnd);
 
                 mode.finish();
 
@@ -94,9 +94,9 @@ public class RNSelectableTextInputViewManager extends ReactViewManager {
         });
     }
 
-    public void onSelectNativeEvent(ReactEditText view, String eventType, String content, int selectionStart, int selectionEnd) {
+    public void onSelectNativeEvent(ReactEditText view, int eventType, String content, int selectionStart, int selectionEnd) {
         WritableMap event = Arguments.createMap();
-        event.putString("eventType", eventType);
+        event.putInt("eventType", eventType);
         event.putString("content", content);
         event.putInt("selectionStart", selectionStart);
         event.putInt("selectionEnd", selectionEnd);
