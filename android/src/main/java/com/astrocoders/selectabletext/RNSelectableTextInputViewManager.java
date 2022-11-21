@@ -4,7 +4,6 @@ import android.view.ActionMode;
 import android.view.ActionMode.Callback;
 import android.view.Menu;
 import android.view.MenuItem;
-
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableArray;
@@ -16,7 +15,6 @@ import com.facebook.react.uimanager.events.RCTEventEmitter;
 import com.facebook.react.views.textinput.ReactEditText;
 import com.facebook.react.views.view.ReactViewGroup;
 import com.facebook.react.views.view.ReactViewManager;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +22,6 @@ import java.util.Map;
 public class RNSelectableTextInputViewManager extends ReactViewManager {
     public static final String REACT_CLASS = "RNSelectableTextInput";
     private String[] _menuItems = new String[0];
-
 
     @Override
     public String getName() {
@@ -36,7 +33,6 @@ public class RNSelectableTextInputViewManager extends ReactViewManager {
         return new ReactViewGroup(context);
     }
 
-
     @ReactProp(name = "menuItems")
     public void setMenuItems(ReactViewGroup reactViewGroup, ReadableArray items) {
         if(items != null) {
@@ -44,11 +40,7 @@ public class RNSelectableTextInputViewManager extends ReactViewManager {
             for (int i = 0; i < items.size(); i++) {
                 result.add(items.getString(i));
             }
-
             this._menuItems = result.toArray(new String[items.size()]);
-
-            // PREVIOUS CODE
-            // registerSelectionListener(result.toArray(new String[items.size()]), reactViewGroup);
         }
     }
 
@@ -56,10 +48,6 @@ public class RNSelectableTextInputViewManager extends ReactViewManager {
         view.setCustomSelectionActionModeCallback(new Callback() {
             @Override
             public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-                // Called when action mode is first created. The menu supplied
-                // will be used to generate action buttons for the action mode
-                // Android Smart Linkify feature pushes extra options into the menu
-                // and would override the generated menu items
                 menu.clear();
                 for (int i = 0; i < _menuItems.length; i++) {
                     menu.add(0, i, 0, _menuItems[i]);
@@ -74,7 +62,6 @@ public class RNSelectableTextInputViewManager extends ReactViewManager {
 
             @Override
             public void onDestroyActionMode(ActionMode mode) {
-                // Called when an action mode is about to be exited and
             }
 
             @Override
